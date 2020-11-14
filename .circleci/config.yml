@@ -29,7 +29,8 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y python3
-            yum install -y epel-release ansible
+            easy_install pip
+            pip install ansible
       - run:
           name: Add EC2 instance ip to inventory
           command: |

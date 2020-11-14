@@ -19,7 +19,7 @@ jobs:
               --stack-name << pipeline.parameters.stack-name >>
   configure_infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: amazon/aws-cli
     steps:
       - checkout
       - add_ssh_keys:
@@ -28,6 +28,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            apk add --update python3
             apk add --update ansible
       - run:
           name: Add EC2 instance ip to inventory
@@ -55,6 +56,6 @@ workflows:
       - configure_infrastructure:
           requires:
             - create_infrastructure
-      - delete_infrastructure:
-          requires:
-            - configure_infrastructure
+      # - delete_infrastructure:
+      #     requires:
+      #       - configure_infrastructure

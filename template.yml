@@ -1,11 +1,11 @@
 Parameters:
   InstanceTypeParameter:
     Type: String
-    Default: t3a.medium
+    Default: t2.micro
     Description: Enter instance size. Default is t3a.medium.
   AMI:
     Type: String
-    Default: ami-0394b19441f2a0121
+    Default: ami-0d971d62e4d019dcc
     Description: The Linux AMI to use. (https://cloud-images.ubuntu.com/locator/ec2/)
   Key:
     Type: String

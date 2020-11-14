@@ -37,9 +37,9 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - run:
-        name: Delete infrastructure
-        command: |
-          aws cloudformation delete-stack --region=eu-central-1 --stack-name my-stack
+          name: Delete infrastructure
+          command: |
+            aws cloudformation delete-stack --region=eu-central-1 --stack-name my-stack
 workflows:
   my_workflow:
     jobs:

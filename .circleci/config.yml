@@ -1,7 +1,9 @@
 version: 2.1
 
 parameters:
-  stack-name: "my-stack"
+  stack-name: 
+    type: string
+    default: "my-stack"
 
 jobs:
   create_infrastructure:

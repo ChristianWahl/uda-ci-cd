@@ -75,6 +75,10 @@ Resources:
       KeyName: !Ref Key
       SecurityGroupIds:
         - Ref: InstanceSecurityGroup
+      Tags:
+        - Key: "Purpose"
+          Value: "cicd1"
+
 Outputs:
   PublicIp:
     Value:

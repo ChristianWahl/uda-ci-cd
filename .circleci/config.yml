@@ -37,26 +37,27 @@ jobs:
             aws ec2 describe-instances \
             --region=eu-central-1 \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --filters "Name=tag:Purpose,Values=cicd1" \
             --output text >> inventory           
       - run:
           name: Configure server
           command: |
             ansible-playbook -i inventory main.yml
-  # delete_infrastructure:
-  #   docker:
-  #     - image: amazon/aws-cli
-  #   steps:
-  #     - run:
-  #         name: Delete infrastructure
-  #         command: |
-  #           aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
+  delete_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - run:
+          name: Delete infrastructure
+          command: |
+            aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
 workflows:
   my_workflow:
     jobs:
-      # - create_infrastructure
-      - configure_infrastructure
-      #     requires:
-      #       - create_infrastructure
-      # - delete_infrastructure:
-      #     requires:
-      #       - configure_infrastructure
+      - create_infrastructure
+      - configure_infrastructure:
+          requires:
+            - create_infrastructure
+      - delete_infrastructure:
+          requires:
+            - configure_infrastructure

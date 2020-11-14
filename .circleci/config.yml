@@ -28,8 +28,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update python3
-            apk add --update ansible
+            yum install python3
+            yum install ansible
       - run:
           name: Add EC2 instance ip to inventory
           command: |
@@ -52,10 +52,10 @@ jobs:
 workflows:
   my_workflow:
     jobs:
-      - create_infrastructure
+      # - create_infrastructure
       - configure_infrastructure:
-          requires:
-            - create_infrastructure
+          # requires:
+          #   - create_infrastructure
       # - delete_infrastructure:
       #     requires:
       #       - configure_infrastructure

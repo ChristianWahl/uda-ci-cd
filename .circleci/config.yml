@@ -37,8 +37,9 @@ jobs:
             aws ec2 describe-instances \
             --region=eu-central-1 \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            # --filters "Name=tag:Project,Values=udacity" \
             --output text >> inventory
+            # --filters "Name=tag:Project,Values=udacity" \
+           
       - run:
           name: Configure server
           command: |

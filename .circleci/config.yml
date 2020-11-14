@@ -35,8 +35,9 @@ jobs:
           name: Add EC2 instance ip to inventory
           command: |
             aws ec2 describe-instances \
+            --region=eu-central-1 \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:Project,Values=udacity" \
+            # --filters "Name=tag:Project,Values=udacity" \
             --output text >> inventory
       - run:
           name: Configure server

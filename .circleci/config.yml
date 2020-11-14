@@ -1,17 +1,20 @@
 version: 2.1
 
+parameters:
+  stack-name: "my-stack"
+
 jobs:
-  # create_infrastructure:
-  #   docker:
-  #     - image: amazon/aws-cli
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Ensure backend infrastructure exist
-  #         command: |
-  #           aws cloudformation deploy \
-  #             --template-file template.yml \
-  #             --stack-name my-stack
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Ensure backend infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name << pipeline.parameters.stack-name >>
   configure_infrastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -39,10 +42,14 @@ jobs:
       - run:
           name: Delete infrastructure
           command: |
-            aws cloudformation delete-stack --region=eu-central-1 --stack-name my-stack
+            aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
 workflows:
   my_workflow:
     jobs:
-      # - create_infrastructure
+      - create_infrastructure
       - configure_infrastructure
+          requires:
+            - create_infrastructure
       - delete_infrastructure
+          requires:
+            - configure_infrastructure

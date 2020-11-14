@@ -1,0 +1,6 @@
+---
+    - name: "copy prod files"
+      become: no
+      copy:
+        src: test.test
+        dest: /home/ubuntu/test.test

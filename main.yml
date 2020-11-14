@@ -1,0 +1,6 @@
+---
+- name: Configure EC2
+  hosts: all
+  user: ubuntu
+  roles:
+  - copy

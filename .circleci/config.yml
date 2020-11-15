@@ -57,6 +57,7 @@ jobs:
               echo "It failed"
             fi
   delete_infrastructure:
+    when: always
     docker:
       - image: amazon/aws-cli
     steps:
@@ -75,6 +76,5 @@ workflows:
           requires:
             - configure_infrastructure
       - delete_infrastructure:
-          when: always
           requires:
             - configure_infrastructure

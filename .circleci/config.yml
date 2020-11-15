@@ -3,7 +3,15 @@ version: 2.1
 parameters:
   stack-name: 
     type: string
-    default: "my-stack"
+    default: "uda-prod-${CIRCLE_WORKFLOW_ID}"
+
+commands:
+  destroy_environment:
+    steps:
+      - run:
+          name: Destroy environment
+          command: |
+            aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
 
 jobs:
   create_infrastructure:
@@ -43,6 +51,8 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory main.yml
+      - destroy_environment
+        when: on_fail
   smoke_test:
     docker:
       - image: alpine:latest
@@ -61,6 +71,8 @@ jobs:
               echo "It failed"
               exit 1
             fi
+      - destroy_environment
+        when: on_fail
   delete_infrastructure:
     docker:
       - image: amazon/aws-cli

@@ -90,22 +90,22 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - run:
-        name: Create S3 bucket prod
-        command: |
-          aws cloudformation deploy --template-file bucket.yml \
-          --stack-name "${CIRCLE_WORKFLOW_ID:0:7}" \
-          --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID:0:7}"
+          name: Create S3 bucket prod
+          command: |
+            aws cloudformation deploy --template-file bucket.yml \
+            --stack-name "${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID:0:7}"
   get_last_deployment_id:
     docker:
       - image: amazon/aws-cli
     steps:
       - run: mkdir -p workspace
       - run:
-        name: Cleanup after promotion
-        command: |
-          aws cloudformation \
-          list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-          --no-paginate --output text > workspace/lastid
+          name: Cleanup after promotion
+          command: |
+            aws cloudformation \
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+            --no-paginate --output text > workspace/lastid
       - persist_to_workspace:
           root: workspace
           paths:
@@ -115,12 +115,12 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - run:
-        name: Promote to prod
-        command: |
-          aws cloudformation deploy \
-          --template-file cloudfront.yml \
-          --stack-name production-distro \
-          --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+          name: Promote to prod
+          command: |
+            aws cloudformation deploy \
+            --template-file cloudfront.yml \
+            --stack-name production-distro \
+            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
   clean_up_old_front_end:
     docker:
       - image: amazon/aws-cli
@@ -129,10 +129,10 @@ jobs:
         at: /tmp/workspace
       - run: PreviousPipelineID=(`cat /tmp/workspace/lastid`)
       - run:
-        name: Clean up old cleanup old frontend
-        command: |
-          aws s3 rm "s3://${OldPipelineID}" --recursive
-          aws cloudformation delete-stack --stack-name "${PreviousPipelineID}"
+          name: Clean up old cleanup old frontend
+          command: |
+            aws s3 rm "s3://${OldPipelineID}" --recursive
+            aws cloudformation delete-stack --stack-name "${PreviousPipelineID}"
 
 workflows:
   my_workflow:
@@ -156,11 +156,11 @@ workflows:
       #       - configure_infrastructure
       #       - smoke_test 
       #       - create_and_deploy_front_end
-      - create_and_deploy_front_end
-      - get_last_deployment_id
-      - promote_to_production:
-          requires:
-            - create_and_deploy_front_end
-      - clean_up_old_front_end:
-          requires:
-            - promote_to_production
+        - create_and_deploy_front_end
+        - get_last_deployment_id
+        - promote_to_production:
+            requires:
+              - create_and_deploy_front_end
+        - clean_up_old_front_end:
+            requires:
+              - promote_to_production

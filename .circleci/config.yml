@@ -100,7 +100,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - run: yum -y install tar
+      - run: yum -y install tar gzip
       - run: mkdir -p workspace
       - run:
           name: Cleanup after promotion

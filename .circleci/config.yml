@@ -52,7 +52,7 @@ jobs:
           command: |
             ansible-playbook -i inventory main.yml
       - destroy_environment
-          when: "on_fail"
+        when: on_fail
   smoke_test:
     docker:
       - image: alpine:latest
@@ -72,7 +72,7 @@ jobs:
               exit 1
             fi
       - destroy_environment
-          when: "on_fail"
+        when: on_fail
   delete_infrastructure:
     docker:
       - image: amazon/aws-cli

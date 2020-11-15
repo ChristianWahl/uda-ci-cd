@@ -43,6 +43,19 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory main.yml
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run:
+          name: Smoke SmokeTest
+          command: |
+            if curl -s --head "https://google.com" 
+            then
+              echo "It worked!"
+            else
+              echo "It failed"
+            fi
   delete_infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -58,6 +71,10 @@ workflows:
       - configure_infrastructure:
           requires:
             - create_infrastructure
+      - smoke_test:
+          requires:
+            - configure_infrastructure
       - delete_infrastructure:
+          when: always
           requires:
             - configure_infrastructure

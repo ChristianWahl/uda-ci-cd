@@ -61,6 +61,7 @@ jobs:
           name: Install curl
           command: |
             apk add curl
+            apk add python3
             pip3 install --upgrade pip
             pip3 install awscli
       - run:

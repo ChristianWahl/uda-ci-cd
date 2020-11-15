@@ -77,3 +77,4 @@ workflows:
       - delete_infrastructure:
           requires:
             - configure_infrastructure
+            - smoke_test 

@@ -52,7 +52,7 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory main.yml
-      destroy_environment
+      - destroy_environment
           
       # - run:
       #     name: Destroy environment

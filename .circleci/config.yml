@@ -60,7 +60,6 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - when: always
       - run:
           name: Delete infrastructure
           command: |

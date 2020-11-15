@@ -8,10 +8,7 @@ parameters:
 commands:
   destroy_environment:
     steps:
-      - run:
-          name: Destroy environment
-          command: |
-            aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
+      - run: aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
 
 jobs:
   create_infrastructure:
@@ -51,11 +48,13 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory main.yml
-      - run:
-          name: Destroy environment
-          command: |
-            aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
+      - destroy_environment
           when: on_fail
+      # - run:
+      #     name: Destroy environment
+      #     command: |
+      #       aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
+      #     when: on_fail
   smoke_test:
     docker:
       - image: alpine:latest

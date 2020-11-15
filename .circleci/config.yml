@@ -99,6 +99,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
+      - run: apk add tar
       - run: mkdir -p workspace
       - run:
           name: Cleanup after promotion
@@ -114,6 +115,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
+      - checkout
       - run:
           name: Promote to prod
           command: |
@@ -125,6 +127,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/workspace
       - run: PreviousPipelineID=(`cat /tmp/workspace/lastid`)

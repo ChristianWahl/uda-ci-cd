@@ -6,7 +6,7 @@ parameters:
     default: "uda-prod-${CIRCLE_WORKFLOW_ID}"
 
 commands:
-  destroy_environment:
+  destroy_environment_on_fail:
     steps:
      - run:
           name: Destroy environment
@@ -52,13 +52,7 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory main.yml
-      - destroy_environment
-          
-      # - run:
-      #     name: Destroy environment
-      #     command: |
-      #       aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
-      #     when: on_fail
+      - destroy_environment_on_fail
   smoke_test:
     docker:
       - image: alpine:latest
@@ -69,7 +63,7 @@ jobs:
       - run:
           name: SmokeTest
           command: |
-            if curl -s --head "https://google.com" 
+            if curl -s --head "https://google123.com" 
             then
               echo "It worked!"
               exit 0
@@ -77,11 +71,7 @@ jobs:
               echo "It failed"
               exit 1
             fi
-      - run:
-          name: Destroy environment
-          command: |
-            aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
-          when: on_fail
+      - destroy_environment_on_fail
   delete_infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -99,8 +89,10 @@ workflows:
             - create_infrastructure
       - smoke_test:
           requires:
+            - create_infrastructure
             - configure_infrastructure
       - delete_infrastructure:
           requires:
+            - create_infrastructure
             - configure_infrastructure
             - smoke_test 

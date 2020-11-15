@@ -126,7 +126,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - attach_workspace:
-        at: /tmp/workspace
+          at: /tmp/workspace
       - run: PreviousPipelineID=(`cat /tmp/workspace/lastid`)
       - run:
           name: Clean up old cleanup old frontend

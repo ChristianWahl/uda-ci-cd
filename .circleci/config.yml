@@ -57,10 +57,10 @@ jobs:
               echo "It failed"
             fi
   delete_infrastructure:
-    when: always
     docker:
       - image: amazon/aws-cli
     steps:
+      - when: always
       - run:
           name: Delete infrastructure
           command: |

@@ -95,7 +95,7 @@ jobs:
           command: |
             aws cloudformation deploy --template-file bucket.yml \
             --stack-name "s3-prod-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+            --parameter-overrides NAME="${CIRCLE_WORKFLOW_ID:0:7}"
   get_last_deployment_id:
     docker:
       - image: amazon/aws-cli

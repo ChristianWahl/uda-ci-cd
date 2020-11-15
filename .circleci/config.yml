@@ -51,7 +51,7 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory main.yml
-      - destroy_environment:
+      - destroy_environment
           when: on_fail
   smoke_test:
     docker:
@@ -71,7 +71,7 @@ jobs:
               echo "It failed"
               exit 1
             fi
-      - destroy_environment:
+      - destroy_environment
           when: on_fail
   delete_infrastructure:
     docker:

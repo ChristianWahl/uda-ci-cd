@@ -11,6 +11,10 @@ commands:
      - run:
           name: Destroy environment
           command: |
+            apk add python3
+            apk add --update py-pip
+            pip3 install --upgrade pip
+            pip3 install awscli
             aws cloudformation delete-stack --region=eu-central-1 --stack-name << pipeline.parameters.stack-name >>
           when: on_fail
 
@@ -61,9 +65,6 @@ jobs:
           name: Install curl
           command: |
             apk add curl
-            apk add python3
-            pip3 install --upgrade pip
-            pip3 install awscli
       - run:
           name: SmokeTest
           command: |

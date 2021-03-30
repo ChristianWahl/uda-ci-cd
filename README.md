@@ -1,4 +1,4 @@
-# uda-ci-cd
+# uda-ci-cd project
 
 # Set AWS variables in pipeline
 AWS_ACCESS_KEY_ID
